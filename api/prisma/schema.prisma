@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -9,21 +7,22 @@ datasource db {
   provider = "mysql"
   url      = "mysql://root:ens4l4d4@localhost:3306/proyecto"
 }
-// Definición del modelo Menu
 model Menu {
   id        Int       @id @default(autoincrement())
   name      String    @unique
   parentId  Int?
   status    Int       @default(0)
-  
+
   // Relación con el modelo Menu (auto-relación)
   parent    Menu?     @relation("MenuToParent", fields: [parentId], references: [id])
-  
+
   // Relación inversa con el modelo Menu (auto-relación)
   children  Menu[]    @relation("MenuToParent")
+
+  // Relación con la tabla MenusToUser
+  users     MenusToUser[] @relation("MenuToParent")
 }
 
-// Definición del modelo User
 model User {
   id        Int       @id @default(autoincrement())
   username  String    @unique
@@ -32,21 +31,21 @@ model User {
   email     String    @unique
   password  String
   status    Int       @default(0)
-  
-  // Relación con el modelo Menu (a través de la tabla MenusToUser)
-  //menus     Menu[]    @relation("UserToMenus", references: [id])
+
+  // Relación con la tabla MenusToUser
+  menus     MenusToUser[] @relation("UserToMenus")
 }
 
-// Definición de la tabla de relación MenusToUser
 model MenusToUser {
-  menuId  Int
+  menuId    Int
   userId  Int
-  
+
   // Relación con el modelo User
-  //userId  User?      @relation("UserToMenus", fields: [userId], references: [id])
-  
+  user      User      @relation("UserToMenus", fields: [userId], references: [id])
+
   // Relación con el modelo Menu
-  // menuId  Menu?      @relation("MenuToParent", fields: [menuId], references: [id])
+  menu      Menu      @relation("MenuToParent", fields: [menuId], references: [id])
+  
   // Restricción única para garantizar que los pares (userId, menuId) sean únicos
   @@unique([userId, menuId])
 }

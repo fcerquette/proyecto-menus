@@ -1,0 +1,5 @@
+-- AddForeignKey
+ALTER TABLE `MenusToUser` ADD CONSTRAINT `MenusToUser_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MenusToUser` ADD CONSTRAINT `MenusToUser_menuId_fkey` FOREIGN KEY (`menuId`) REFERENCES `Menu`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
